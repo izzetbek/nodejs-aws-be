@@ -1,0 +1,76 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Products",
+    "description": "# Introduction\nProducts API\n",
+    "contact": {}
+  },
+  "host": "gblhr1x62d.execute-api.eu-west-1.amazonaws.com",
+  "basePath": "/dev",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "description": "Get products list",
+        "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0": {
+      "get": {
+        "description": "Get product",
+        "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            },
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Misc",
+      "description": ""
+    }
+  ]
+}
