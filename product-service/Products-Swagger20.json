@@ -42,7 +42,7 @@
         }
       }
     },
-    "/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0": {
+    "/products/{productId}": {
       "get": {
         "description": "Get product",
         "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0",
