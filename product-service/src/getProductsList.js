@@ -1,24 +1,22 @@
 'use strict';
 
-import productsList from "./productList.json";
+import { endClient, queryAll } from "./utils/db";
+import response from "./utils/response";
 
-export const getProductsList = async () => {
+export const getProductsList = async event => {
+  // noinspection JSUnresolvedVariable
+  console.log({
+    path: event.path,
+    method: event.httpMethod,
+  });
   try {
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Headers" : "Origin, X-Requested-With, Content-Type, Accept",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
-        "Access-Control-Allow-Credentials" : true
-      },
-      body: JSON.stringify(productsList),
-    };
+    const products = await queryAll(
+        'SELECT p.*, s.count FROM products p LEFT JOIN stocks s ON s.product_id = p.id'
+    );
+    return response(products);
   } catch (e) {
-    return {
-      statusCode: e.code || 500,
-      body: JSON.stringify({ message: e.message }),
-    };
+    return response({message: e.message}, 500);
+  } finally {
+    await endClient();
   }
 };

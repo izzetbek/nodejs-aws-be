@@ -1,15 +1,26 @@
 'use strict';
 
-import HttpError from "./httpError";
-import productsList from "./productList.json";
+import HttpError from "./utils/httpError";
+import { endClient, queryOne } from "./utils/db";
+import response from "./utils/response";
 
-const getProduct = id => {
+const getProduct = async id => {
     if (!id) {
         throw new HttpError(400, 'Bad request');
     }
 
-    // noinspection JSUnresolvedFunction
-    const product = productsList.find(product => product.id === id);
+    let product;
+    try {
+        product = await queryOne(
+            'SELECT p.*, s.count FROM products p LEFT JOIN stocks s ON s.product_id = p.id WHERE p.id = $1',
+            [id]
+        );
+    } catch (e) {
+        throw new HttpError(500, e.message);
+    } finally {
+        await endClient();
+    }
+
     if (!product) {
         throw new HttpError(404, 'Product not found');
     }
@@ -18,22 +29,15 @@ const getProduct = id => {
 }
 
 export const getProductsById = async event => {
+    // noinspection JSUnresolvedVariable
+    console.log({
+        path: event.path,
+        method: event.httpMethod,
+    });
     try {
-        const product = getProduct(event.pathParameters.id);
-        return {
-            statusCode: 200,
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Headers" : "Origin, X-Requested-With, Content-Type, Accept",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "OPTIONS, POST, GET"
-            },
-            body: JSON.stringify(product),
-        };
+        const product = await getProduct(event.pathParameters.id);
+        return response(product);
     } catch (e) {
-        return {
-            statusCode: e.code || 500,
-            body: JSON.stringify({ message: e.message }),
-        }
+        return response({ message: e.message }, e.code);
     }
 };
