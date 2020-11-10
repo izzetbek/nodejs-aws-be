@@ -3,10 +3,10 @@ const response = (body = {}, statusCode = 200) => {
         statusCode,
         headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Headers" : "Origin, X-Requested-With, Content-Type, Accept",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
-            "Access-Control-Allow-Credentials" : true
+            "Access-Control-Allow-Methods": "OPTIONS, POST, PUT, GET, DELETE",
+            "Access-Control-Allow-Credentials": true
         },
         body: JSON.stringify(body),
     }

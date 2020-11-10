@@ -24,6 +24,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-1
+  apiGateway:
+    shouldStartNameWithService: true
 #  environment:
 #    test: test
 # you can overwrite defaults here
