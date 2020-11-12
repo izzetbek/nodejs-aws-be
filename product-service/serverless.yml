@@ -24,6 +24,10 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-1
+  apiGateway:
+    shouldStartNameWithService: true
+#  environment:
+#    test: test
 # you can overwrite defaults here
 #  stage: dev
 
@@ -42,10 +46,6 @@ provider:
 #          - - "arn:aws:s3:::"
 #            - "Ref" : "ServerlessDeploymentBucket"
 #            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
 
 # you can add packaging information here
 #package:
@@ -70,6 +70,13 @@ functions:
       - http:
           path: products/{id}
           method: get
+          cors: true
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - http:
+          path: products
+          method: post
           cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

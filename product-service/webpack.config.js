@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const slsw = require('serverless-webpack');
 
@@ -9,6 +11,12 @@ module.exports = {
         path: path.join(__dirname, '.webpack'),
     },
     target: 'node',
+    plugins: [
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^pg-native$/,
+        }),
+        new Dotenv()
+    ],
     // Generate sourcemaps for proper error messages
     devtool: 'source-map',
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',

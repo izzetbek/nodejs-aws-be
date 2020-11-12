@@ -40,16 +40,38 @@
             "headers": {}
           }
         }
+      },
+      "post": {
+        "description": "Create product",
+        "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products",
+        "tags": [
+          "Misc"
+        ],
+        "operationId": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            },
+            "headers": {}
+          }
+        }
       }
     },
     "/products/{productId}": {
       "get": {
         "description": "Get product",
-        "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+        "summary": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/55a803ea-1ccb-40be-b11b-1dd4c2026dc8",
         "tags": [
           "Misc"
         ],
-        "operationId": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+        "operationId": "https://gblhr1x62d.execute-api.eu-west-1.amazonaws.com/dev/products/55a803ea-1ccb-40be-b11b-1dd4c2026dc8",
         "deprecated": false,
         "produces": [
           "application/json"
