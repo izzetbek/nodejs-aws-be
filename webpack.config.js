@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
+const fs = require('fs');
 const slsw = require('serverless-webpack');
 
 module.exports = {
@@ -15,7 +16,9 @@ module.exports = {
         new webpack.IgnorePlugin({
             resourceRegExp: /^pg-native$/,
         }),
-        new Dotenv()
+        new Dotenv({
+            path: fs.existsSync('./.env') ? './.env' : '../../.env',
+        })
     ],
     // Generate sourcemaps for proper error messages
     devtool: 'source-map',

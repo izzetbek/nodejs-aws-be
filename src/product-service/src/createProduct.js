@@ -1,8 +1,8 @@
-import response from "./utils/response";
+import response from "../../utils/response";
 import isEmpty from "validator/es/lib/isEmpty";
 import isInt from "validator/es/lib/isInt";
-import { endClient, query, queryOne } from "./utils/db";
-import HttpError from "./utils/httpError";
+import { endClient, query, queryOne } from "../../utils/db";
+import HttpError from "../../utils/httpError";
 
 const validateData = (title, price, count) => {
     const messages = {};

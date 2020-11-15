@@ -1,7 +1,7 @@
 'use strict';
 
-import { endClient, queryAll } from "./utils/db";
-import response from "./utils/response";
+import { endClient, queryAll } from "../../utils/db";
+import response from "../../utils/response";
 
 export const getProductsList = async event => {
   // noinspection JSUnresolvedVariable
