@@ -9,12 +9,16 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   iamRoleStatements:
-    - Effect: "Allow"
-      Action: "s3:ListBucket"
-      Resource: "arn:aws:s3:::nodejs-aws-static"
-    - Effect: "Allow"
-      Action: "s3:*"
-      Resource: "arn:aws:s3:::nodejs-aws-static/*"
+    - Effect: Allow
+      Action:
+        - s3:ListBucket
+      Resource:
+        - arn:aws:s3:::nodejs-aws-static
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource:
+        - arn:aws:s3:::nodejs-aws-static/*
 
 functions:
   importProductsFile:
@@ -26,8 +30,8 @@ functions:
           cors: true
           request:
             parameters:
-            querystrings:
-            name: true
+              querystrings:
+                name: true
   importFileParser:
     handler: handler.importFileParser
     events:
