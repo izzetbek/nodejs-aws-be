@@ -8,7 +8,7 @@ describe('ImportProductsFile handler', () => {
         AWS.mock('S3', 'getSignedUrl', testUrl);
     });
     it('should successfully get signed url', async () => {
-        const result = await importProductsFile({query: {name: 'catalog.csv'}});
+        const result = await importProductsFile({queryStringParameters: {name: 'catalog.csv'}});
         expect(result).toEqual(response(testUrl));
     });
 });
