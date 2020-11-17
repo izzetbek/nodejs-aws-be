@@ -8,17 +8,19 @@ provider:
   region: eu-west-1
   apiGateway:
     shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   iamRoleStatements:
-    - Effect: Allow
+    - Effect: "Allow"
       Action:
-        - s3:ListBucket
+        - "s3:ListBucket"
       Resource:
-        - arn:aws:s3:::nodejs-aws-static
-    - Effect: Allow
+        - "arn:aws:s3:::nodejs-aws-static"
+    - Effect: "Allow"
       Action:
-        - s3:*
+        - "s3:*"
       Resource:
-        - arn:aws:s3:::nodejs-aws-static/*
+        - "arn:aws:s3:::nodejs-aws-static/*"
 
 functions:
   importProductsFile:
