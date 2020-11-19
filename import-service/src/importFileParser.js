@@ -4,7 +4,7 @@ import response from "../../utils/response";
 
 export const importFileParser = async event => {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
-    const Bucket = 'nodejs-aws-static';
+    const Bucket = 'nodejs-aws-static-2';
 
     try {
         await Promise.all(

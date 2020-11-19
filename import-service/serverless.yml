@@ -15,12 +15,12 @@ provider:
       Action:
         - "s3:ListBucket"
       Resource:
-        - "arn:aws:s3:::nodejs-aws-static"
+        - "arn:aws:s3:::nodejs-aws-static-2"
     - Effect: "Allow"
       Action:
         - "s3:*"
       Resource:
-        - "arn:aws:s3:::nodejs-aws-static/*"
+        - "arn:aws:s3:::nodejs-aws-static-2/*"
 
 functions:
   importProductsFile:
@@ -38,7 +38,7 @@ functions:
     handler: handler.importFileParser
     events:
       - s3:
-          bucket: nodejs-aws-static
+          bucket: nodejs-aws-static-2
           event: s3:ObjectCreated:*
           rules:
             - prefix: uploaded/
