@@ -6,6 +6,8 @@ export const importFileParser = async event => {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
     const Bucket = 'nodejs-aws-static-2';
 
+    const sqs = new AWS.SQS({ region: 'eu-west-1' });
+
     try {
         await Promise.all(
             event.Records.map(async record => {
@@ -13,10 +15,19 @@ export const importFileParser = async event => {
                 await new Promise((resolve, reject) => {
                     s3.getObject({ Bucket, Key }).createReadStream()
                         .pipe(csv())
-                        .on('data', console.log)
+                        .on('data', product => {
+                            sqs.sendMessage({
+                                QueueUrl: process.env.SQS_URL,
+                                MessageBody: JSON.stringify(product),
+                            }, error => {
+                                if (error) {
+                                    reject(error);
+                                }
+                            });
+                        })
                         .on('end', resolve)
                         .on('error', reject);
-                })
+                });
 
                 await s3.copyObject({
                     Bucket,

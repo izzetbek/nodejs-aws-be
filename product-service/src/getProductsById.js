@@ -1,7 +1,7 @@
 'use strict';
 
 import HttpError from "../../utils/httpError";
-import { endClient, queryOne } from "../../utils/db";
+import { endClient, queryOne } from "./utils/db";
 import response from "../../utils/response";
 
 const getProduct = async id => {

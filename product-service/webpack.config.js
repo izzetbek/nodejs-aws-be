@@ -1,7 +1,7 @@
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const slsw = require('serverless-webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: slsw.lib.entries,
@@ -15,7 +15,12 @@ module.exports = {
         new webpack.IgnorePlugin({
             resourceRegExp: /^pg-native$/,
         }),
-        new Dotenv()
+        new CopyPlugin({
+            patterns: [
+                '.env',
+                // { from: '.env' }
+            ]
+        })
     ],
     // Generate sourcemaps for proper error messages
     devtool: 'source-map',
