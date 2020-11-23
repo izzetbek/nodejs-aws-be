@@ -4,6 +4,7 @@ import response from "../../../utils/response";
 
 jest.mock('validator/es/lib/isEmpty', () => () => false);
 jest.mock('validator/es/lib/isInt', () => () => true);
+// noinspection JSUnusedGlobalSymbols
 jest.mock('../utils/db', () => ({
     query: () => {},
     queryOne: () => ({id: 'r3bhl5l4bg54lubbkfbvfkvb5'})

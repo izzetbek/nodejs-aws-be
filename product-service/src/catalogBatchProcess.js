@@ -1,7 +1,7 @@
 import AWS from "aws-sdk";
 import isEmpty from "validator/es/lib/isEmpty";
 import isInt from "validator/es/lib/isInt";
-import { query, queryOne } from "./utils/db";
+import {endClient, query, queryOne} from "./utils/db";
 import response from "../../utils/response";
 import HttpError from "../../utils/httpError";
 
@@ -48,6 +48,8 @@ export const catalogBatchProcess = async event => {
                 } catch (e) {
                     await query('ROLLBACK');
                     failed.push({ product, error: e.message });
+                } finally {
+                    await endClient();
                 }
             })
         );
@@ -59,7 +61,7 @@ export const catalogBatchProcess = async event => {
             MessageAttributes: {
                 productsCount: {
                     DataType: 'Number',
-                    StringValue: event.Records.length - failed.length
+                    StringValue: (event.Records.length - failed.length).toString()
                 }
             },
             TopicArn: process.env.SNS_ARN,
