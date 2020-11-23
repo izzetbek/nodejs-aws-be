@@ -53,19 +53,15 @@ export const catalogBatchProcess = async event => {
         );
 
         const sns = new AWS.SNS({ region: 'eu-west-1' });
-        await sns.setSubscriptionAttributes({
-            AttributeName: 'success',
-            AttributeValue: event.Records.length > failed.length,
-            SubscriptionArn: process.env.SNS_SUBSCRIPTION_ARN,
-        }).promise();
-        await sns.setSubscriptionAttributes({
-            AttributeName: 'success',
-            AttributeValue: event.Records.length > failed.length,
-            SubscriptionArn: process.env.SNS_FAIL_SUBSCRIPTION_ARN,
-        }).promise();
         const res = await sns.publish({
             Subject: 'Products import',
             Message: JSON.stringify({ count: event.Records.length, failed: failed.length }),
+            MessageAttributes: {
+                productsCount: {
+                    DataType: 'Number',
+                    StringValue: event.Records.length - failed.length
+                }
+            },
             TopicArn: process.env.SNS_ARN,
         }, (err, data) => {
             return err ? err.message : data.MessageId;

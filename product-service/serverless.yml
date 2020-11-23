@@ -8,6 +8,52 @@ provider:
   region: eu-west-1
   apiGateway:
     shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    SNS_ARN:
+      Ref: SNSTopic
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sns:*"
+      Resource:
+        Ref: SNSTopic
+    - Effect: "Allow"
+      Action:
+        - "sqs:*"
+      Resource:
+        - !ImportValue SQSQueueArn
+
+resources:
+  Resources:
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: izzetfatullayev93@gmail.com
+        Protocol: email
+        FilterPolicy:
+          productsCount:
+            - numeric:
+                - ">"
+                - 0
+        TopicArn:
+          Ref: SNSTopic
+    FailSNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: zebalaw@mail.ru
+        Protocol: email
+        FilterPolicy:
+          productsCount:
+            - numeric:
+                - "="
+                - 0
+        TopicArn:
+          Ref: SNSTopic
 
 functions:
   getProductsList:
@@ -31,6 +77,13 @@ functions:
           path: products
           method: post
           cors: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            !ImportValue SQSQueueArn
 
 plugins:
   - serverless-webpack

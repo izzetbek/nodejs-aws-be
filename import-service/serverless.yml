@@ -12,12 +12,6 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     SQS_URL:
       Ref: SQSQueue
-    SNS_ARN:
-      Ref: SNSTopic
-    SNS_SUBSCRIPTION_ARN:
-      Ref: SNSSubscription
-    SNS_FAIL_SUBSCRIPTION_ARN:
-      Ref: FailSNSSubscription
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -33,12 +27,9 @@ provider:
       Action:
         - "sqs:*"
       Resource:
-        - Fn::GetAtt: [ SQSQueue, Arn ]
-    - Effect: "Allow"
-      Action:
-        - "sns:*"
-      Resource:
-        Ref: SNSTopic
+        - Fn::GetAtt:
+          - SQSQueue
+          - Arn
 
 resources:
   Resources:
@@ -46,30 +37,11 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: catalogItemsQueue
-    SNSTopic:
-      Type: AWS::SNS::Topic
-      Properties:
-        TopicName: createProductTopic
-    SNSSubscription:
-      Type: AWS::SNS::Subscription
-      Properties:
-        Endpoint: izzetfatullayev93@gmail.com
-        Protocol: email
-        FilterPolicy:
-          success:
-            - true
-        TopicArn:
-          Ref: SNSTopic
-    FailSNSSubscription:
-      Type: AWS::SNS::Subscription
-      Properties:
-        Endpoint: zebalaw@mail.ru
-        Protocol: email
-        FilterPolicy:
-          success:
-            - false
-        TopicArn:
-          Ref: SNSTopic
+  Outputs:
+    SqsQueueArn:
+      Value: !GetAtt SQSQueue.Arn
+      Export:
+        Name: SQSQueueArn
 
 functions:
   importProductsFile:
@@ -92,15 +64,6 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
-  catalogBatchProcess:
-    handler: handler.catalogBatchProcess
-    events:
-      - sqs:
-          batchSize: 5
-          arn:
-            Fn::GetAtt:
-              - SQSQueue
-              - Arn
 
 plugins:
   - serverless-webpack
