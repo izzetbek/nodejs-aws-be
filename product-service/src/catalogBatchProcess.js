@@ -48,11 +48,10 @@ export const catalogBatchProcess = async event => {
                 } catch (e) {
                     await query('ROLLBACK');
                     failed.push({ product, error: e.message });
-                } finally {
-                    await endClient();
                 }
             })
         );
+        await endClient();
 
         const sns = new AWS.SNS({ region: 'eu-west-1' });
         const res = await sns.publish({
