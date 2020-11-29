@@ -37,6 +37,16 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: catalogItemsQueue
+    GatewayResponseDefault400:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          'gatewayresponse.header.Access-Control-Allow-Origin': "'https://d3hmyqwjwvay0w.cloudfront.net'"
+          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'"
+          'gatewayresponse.header.Access-Control-Allow-Credentials': "'true'"
+        ResponseType: 'DEFAULT_4XX'
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
   Outputs:
     SqsQueueArn:
       Value: !GetAtt SQSQueue.Arn
@@ -51,6 +61,10 @@ functions:
           path: import
           method: get
           cors: true
+          authorizer:
+            arn: arn:aws:lambda:eu-west-1:119595940820:function:authorization-service-dev-basicAuthorizer
+            identitySource: method.request.header.Authorization
+            # resultTtlInSeconds: 3600
           request:
             parameters:
               querystrings:
