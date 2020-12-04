@@ -1,0 +1,83 @@
+service: import-service
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-1
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    SQS_URL:
+      Ref: SQSQueue
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::nodejs-aws-static-2"
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::nodejs-aws-static-2/*"
+    - Effect: "Allow"
+      Action:
+        - "sqs:*"
+      Resource:
+        - Fn::GetAtt:
+          - SQSQueue
+          - Arn
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    GatewayResponseDefault400:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          'gatewayresponse.header.Access-Control-Allow-Origin': "'https://d3hmyqwjwvay0w.cloudfront.net'"
+          'gatewayresponse.header.Access-Control-Allow-Headers': "'*'"
+          'gatewayresponse.header.Access-Control-Allow-Credentials': "'true'"
+        ResponseType: 'DEFAULT_4XX'
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+  Outputs:
+    SqsQueueArn:
+      Value: !GetAtt SQSQueue.Arn
+      Export:
+        Name: SQSQueueArn
+
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - http:
+          path: import
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:eu-west-1:119595940820:function:authorization-service-dev-basicAuthorizer
+            identitySource: method.request.header.Authorization
+            # resultTtlInSeconds: 3600
+          request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: nodejs-aws-static-2
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
+
+plugins:
+  - serverless-webpack
