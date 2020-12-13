@@ -1,6 +1,6 @@
 const mcache = require('memory-cache');
 
-module.exports.cache = duration => (req, res, next) => {
+const cache = duration => (req, res, next) => {
     if (req.method !== 'GET') {
         next();
     }
@@ -20,3 +20,5 @@ module.exports.cache = duration => (req, res, next) => {
 
     next();
 }
+
+module.exports = cache;
